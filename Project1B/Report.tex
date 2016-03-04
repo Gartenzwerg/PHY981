@@ -19,6 +19,8 @@
 
 In this project, I developed a C++ code to perform the required Hartree-Fock calculations. A few of the programming ideas were borrowed from Prof Hjorth-Jensen's example code in python. 
 
+The code can be found at https://github.com/Gartenzwerg/PHY981/blob/master/Project1B/ . (Please be reminded to compile and link with options "-O2 -larmadillo".)
+
 \section{Task A: Harmonic Oscillators}
 %\subsection{}
 The code reads and stores all single-particle states from \textit{spdata.dat}. The relevant neutron states were extracted, and a $40\times40$ diagonal Hamiltonian matrix in m-scheme was set up. The matrix was then diagonalized with the help of \textit{armadillo}, a linear algebra library. 
@@ -105,5 +107,39 @@ Below are the Hartree-Fock single-particle energies and comparison with the harm
 As can be obviously seen, the Hartree-Fock energies are much lower than the harmonic oscillator ones. This agrees with our expectation, as the two-body potential serves to lower the energy levels. It is also critical that the two-body potential lifts the degeneracy in $j$. The Hartree-Fock energies with a two-body potential have dependence on $n$, $l$ and $j$, whereas $n$ and $l$ only suffice to determine the energy levels in the harmonic oscillator model.
 
 It should also be pointed out that the calculations performed are not exact, owing to the facts that 1) the neutron-proton interactions are deliberately excluded, that 2) only a finite subset (of size 40) of the infinite harmonic oscillator basis were used, and that 3) corrections to the two-body potential, three-body interactions, clustering effects, etc. might exist.
+
+\section{Task D: $^{16}$O}
+The previous code was modified to perform Hartree-Fock calculations for $^{16}$O. Results are listed in the following table. $E_{HF}^{\nu}$ and $E_{HF}^{\pi}$ denote the Hartree-Fock energies for neutrons and protons, respectively.
+\begin{table}[H]
+  \centering
+\begin{tabular}{ccc}
+  \toprule
+	state & \textit{$E_{HF}^{\nu}$} [MeV] & \textit{$E_{HF}^{\pi}$} [MeV] \\
+  \midrule
+	$0s_{1/2}$ & -40.6426 & -40.4602\\
+	$0p_{3/2}$ & -11.7201 & -11.5886 \\
+	$0p_{1/2}$ & -6.84033 & -6.71334 \\
+	$0d_{5/2}$ & 18.7589 & 18.8082 \\   
+	\bottomrule
+  \end{tabular}
+\end{table}
+
+Proton single-particle energies are slightly higher than their neutron counterparts in the corresponding states, because of the Coulomb repulsion.
+
+I would compare $\epsilon_{0p_{1/2}}$ for neutrons or protons with $S_n$ or $S_p$ for $^{16}$O, $\epsilon_{0d_{5/2}}$ for neutron with $S_n$ for $^{17}$O, and $\epsilon_{0d_{5/2}}$ for proton with $S_p$ for $^{17}$F.
+
+\begin{table}[H]
+  \centering
+\begin{tabular}{ccccc}
+  \toprule
+	state & \textit{$E_{HF}^{\nu}$} [MeV] & $S_n$ [MeV] & \textit{$E_{HF}^{\pi}$} [MeV] & $S_p$ [MeV] \\
+  \midrule
+	$0p_{1/2}$ & -6.84033 & 15.7 [$^{16}$O] & -6.71334 & 12.1 [$^{16}$O] \\
+	$0d_{5/2}$ & 18.7589 & 4.14 [$^{17}$O] & 18.8082 & 0.600 [$^{17}$F] \\    
+	\bottomrule
+  \end{tabular}
+\end{table}
+
+It seems that our naive Hartree-Fock calculations fail to reproduce the actual separation energies. It is no surprise that there is much more to the picture than meets the eye. The Hartree-Fock calculations here are on a single-particle level, in the sense that they make little reference to the whole picture, the 16-body problem. Solving for single-particle states and energies using single-particle basis is primitive and limited. Instead, we ought to consider using Slater determinants as our basis and recognizing energy as a functional of Slater determinant. 
 
 \end{document}  
