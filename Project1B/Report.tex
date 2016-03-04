@@ -1,0 +1,109 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{float}
+
+\title{PHY981 Project 1}
+\author{Hao Lin}
+\date{3 March, 2016}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+In this project, I developed a C++ code to perform the required Hartree-Fock calculations. A few of the programming ideas were borrowed from Prof Hjorth-Jensen's example code in python. 
+
+\section{Task A: Harmonic Oscillators}
+%\subsection{}
+The code reads and stores all single-particle states from \textit{spdata.dat}. The relevant neutron states were extracted, and a $40\times40$ diagonal Hamiltonian matrix in m-scheme was set up. The matrix was then diagonalized with the help of \textit{armadillo}, a linear algebra library. 
+
+Results of single-particle energies are as follows.
+\begin{table}[H]
+  \centering
+%\caption{Single-particle harmonic oscillator energy}
+\begin{tabular}{ccc}
+  \toprule
+	label & state &Energy [MeV] \\
+  \midrule
+	1 & $0s_{1/2}$ & 15 \\
+	2 & $0s_{1/2}$ & 15 \\
+	3 & $0p_{3/2}$ & 25 \\
+	4 & $0p_{3/2}$ & 25 \\
+	5 & $0p_{3/2}$ & 25 \\
+	6 & $0p_{3/2}$ & 25 \\
+	7 & $0p_{1/2}$ & 25 \\
+	8 & $0p_{1/2}$ & 25 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Task B: Formalisms}
+Consider two-body matrix elements of the form $\langle n_1 l_1 j_1 m_{j1} n_2 l_2 j_2 m_{j2}|V|n_3 l_3 j_3 m_{j3} n_4 l_4 j_4 m_{j4}\rangle$. We shall show that they are diagonal in $ljm_j$ and is independent of $m_j$, given that $V$ is a scalar tensor operator.
+
+Since $V$, a rank-0 tensor operator, cannot connect states with different $j$ or different $m_j$, we must have $j_1 = j_3$, $j_2 = j_4$, $m_{j1} = m_{j3}$ and $m_{j2} = m_{j4}$ for the non-vanishing matrix elements. Also note that $V$ is a scalar operator and thus has even parity. The difference in $l$ between the \textit{bra} and the \textit{ket} must be even for non-vanishing elements. However, since $j = l \pm \frac{1}{2}$ for nucleons and the $j$'s in the \textit{bra} and the \textit{ket} match, the difference in $l$ must be 0. 
+
+Thus, we can restrict our attention to those of the form $\langle n_1ljm_jn_2l'j'm_{j'}|V|n_3ljm_jn_4l'j'm_{j'}\rangle$. In fact, better still, we need only look at $\langle n_1ljn_2l'j'|V|n_3ljn_4l'j'\rangle$, as $V$ is independent of $m$'s. Indeed, 
+\begin{equation*}
+\label{ }
+\langle n_1ljn_2l'j'|V|n_3ljn_4l'j'\rangle = \langle n_1ljm_jn_2l'j'm_{j'}|V|n_3ljm_jn_4l'j'm_{j'}\rangle
+\end{equation*} for any $m_j$ and $m_j'$. If necessary, we can also express these reduced matrix elements by an average over all $m_j$ and $m_{j'}$ values. 
+
+It is obvious from definition that the hamiltonian matrix element can be written as (I denote by $p$ the new Hartree-Fock states.)
+\begin{align*}
+\label{ }
+h^{lj}_{n_1n_3} &= \delta_{n_3 n_1}(2n_1+l + 3/2)\hbar\omega + \sum_{p \leq \mathrm{F}}\sum_{n_2n_4}\sum_{l'j'm_{j'}}^{occ} C^{*l'j'}_{n_2 p} C^{l'j'}_{n_4 q} \langle n_1ljm_jn_2l'j'm_{j'}|V|n_3ljm_jn_4l'j'm_{j'}\rangle.
+\end{align*}
+By introducing the reduced matrix elements
+\begin{equation*}
+\label{ }
+\langle n_1ljn_2l'j'|V|n_3ljn_4l'j'\rangle := \frac{1}{(2j+1)(2j'+1)}\sum_{mm'}  \langle n_1ljmn_2l'j'm'|V|n_3ljmn_4l'j'm'\rangle\, ,
+\end{equation*}
+and defining the density matrix elements as
+\begin{equation*}
+\label{ }
+\rho^{l'j'}_{n_4n_2} := \frac{1}{2j'+1} \sum_{p  \leq \mathrm{F}} C^{*l'j'}_{n_2p}C^{l'j'}_{n_4p}\,,
+\end{equation*}
+we can simplify the hamiltonian
+\begin{equation*}
+\label{ }
+h^{lj}_{n_1n_3} = \delta_{n_3 n_1}(2n_1+l + 3/2)\hbar\omega + \sum_{n_2n_4}\sum_{l'j'}^{occ}\langle n_1ljn_2l'j'|V|n_3ljn_4l'j'\rangle\rho^{l'j'}_{n_4n_2}.
+\end{equation*}
+Fianally, it follows straight from definition that the Hartree-Fock equations should read
+\begin{equation*}
+\label{ }
+\sum_{n_3} h^{lj}_{n_1n_3}C^{lj}_{n_3p} = \epsilon_{plj}C^{lj}_{n_3p}\,.
+\end{equation*}
+
+\section{Task C: Hartree-Fock calculations with a two-body potential}
+I extracted only the neutron-neutron interactions from $two-body.dat$ and constructed the two-body potential matrix accordingly in each iteration. The uncoupled neutron basis was used and the dimension of the matrix is $40\times40$. However, thanks to the selection rules mentioned in \emph{Task B} and the symmetry of the matrix itself, computations of many of the elements were either safely skipped or largely simplified. The entire program takes merely two seconds to complete the task and outputs correct results.
+
+Below are the Hartree-Fock single-particle energies and comparison with the harmonic oscillator energies.
+\begin{table}[H]
+  \centering
+\begin{tabular}{cccc}
+  \toprule
+	label & state & \textit{$E_{HO}$} [MeV] & \textit{$E_{HF}$} [MeV] \\
+  \midrule
+	1 & $0s_{1/2}$ & 15 & 0.310294 \\
+	2 & $0s_{1/2}$ & 15 & 0.310294 \\
+	3 & $0p_{3/2}$ & 25 & 14.7087 \\
+	4 & $0p_{3/2}$ & 25 & 14.7087 \\
+	5 & $0p_{3/2}$ & 25 & 14.7087 \\
+	6 & $0p_{3/2}$ & 25 & 14.7087 \\
+	7 & $0p_{1/2}$ & 25 & 16.8295 \\
+	8 & $0p_{1/2}$ & 25 & 16.8295 \\    
+	\bottomrule
+  \end{tabular}
+\end{table}
+
+As can be obviously seen, the Hartree-Fock energies are much lower than the harmonic oscillator ones. This agrees with our expectation, as the two-body potential serves to lower the energy levels. It is also critical that the two-body potential lifts the degeneracy in $j$. The Hartree-Fock energies with a two-body potential have dependence on $n$, $l$ and $j$, whereas $n$ and $l$ only suffice to determine the energy levels in the harmonic oscillator model.
+
+It should also be pointed out that the calculations performed are not exact, owing to the facts that 1) the neutron-proton interactions are deliberately excluded, that 2) only a finite subset (of size 40) of the infinite harmonic oscillator basis were used, and that 3) corrections to the two-body potential, three-body interactions, clustering effects, etc. might exist.
+
+\end{document}  
