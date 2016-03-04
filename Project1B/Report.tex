@@ -19,11 +19,11 @@
 
 In this project, I developed a C++ code to perform the required Hartree-Fock calculations. A few of the programming ideas were borrowed from Prof Hjorth-Jensen's example code in python. 
 
-The code can be found at https://github.com/Gartenzwerg/PHY981/blob/master/Project1B/ . (Please be reminded to compile and link with options "-O2 -larmadillo".)
+The codes can be found at https://github.com/Gartenzwerg/PHY981/blob/master/Project1B/ .(Please be reminded to compile and link with options "-O2 -larmadillo".)
 
 \section{Task A: Harmonic Oscillators}
 %\subsection{}
-The code reads and stores all single-particle states from \textit{spdata.dat}. The relevant neutron states were extracted, and a $40\times40$ diagonal Hamiltonian matrix in m-scheme was set up. The matrix was then diagonalized with the help of \textit{armadillo}, a linear algebra library. 
+The program reads and stores all single-particle states from \textit{spdata.dat}. The relevant neutron states were extracted, and a $40\times40$ diagonal Hamiltonian matrix in m-scheme was set up. The matrix was then diagonalized with the help of \textit{armadillo}, a linear algebra library. 
 
 Results of single-particle energies are as follows.
 \begin{table}[H]
@@ -50,16 +50,16 @@ Consider two-body matrix elements of the form $\langle n_1 l_1 j_1 m_{j1} n_2 l_
 
 Since $V$, a rank-0 tensor operator, cannot connect states with different $j$ or different $m_j$, we must have $j_1 = j_3$, $j_2 = j_4$, $m_{j1} = m_{j3}$ and $m_{j2} = m_{j4}$ for the non-vanishing matrix elements. Also note that $V$ is a scalar operator and thus has even parity. The difference in $l$ between the \textit{bra} and the \textit{ket} must be even for non-vanishing elements. However, since $j = l \pm \frac{1}{2}$ for nucleons and the $j$'s in the \textit{bra} and the \textit{ket} match, the difference in $l$ must be 0. 
 
-Thus, we can restrict our attention to those of the form $\langle n_1ljm_jn_2l'j'm_{j'}|V|n_3ljm_jn_4l'j'm_{j'}\rangle$. In fact, better still, we need only look at $\langle n_1ljn_2l'j'|V|n_3ljn_4l'j'\rangle$, as $V$ is independent of $m$'s. Indeed, 
+Therefore, we can restrict our attention to those of the form $\langle n_1ljm_jn_2l'j'm_{j'}|V|n_3ljm_jn_4l'j'm_{j'}\rangle$. In fact, better still, we need only look at $\langle n_1ljn_2l'j'|V|n_3ljn_4l'j'\rangle$, as $V$ is independent of $m$'s. Indeed, 
 \begin{equation*}
 \label{ }
 \langle n_1ljn_2l'j'|V|n_3ljn_4l'j'\rangle = \langle n_1ljm_jn_2l'j'm_{j'}|V|n_3ljm_jn_4l'j'm_{j'}\rangle
 \end{equation*} for any $m_j$ and $m_j'$. If necessary, we can also express these reduced matrix elements by an average over all $m_j$ and $m_{j'}$ values. 
 
-It is obvious from definition that the hamiltonian matrix element can be written as (I denote by $p$ the new Hartree-Fock states.)
+It is obvious from definition that the hamiltonian matrix elements can be written as (I denote by $p$ the new Hartree-Fock states.)
 \begin{align*}
 \label{ }
-h^{lj}_{n_1n_3} &= \delta_{n_3 n_1}(2n_1+l + 3/2)\hbar\omega + \sum_{p \leq \mathrm{F}}\sum_{n_2n_4}\sum_{l'j'm_{j'}}^{occ} C^{*l'j'}_{n_2 p} C^{l'j'}_{n_4 q} \langle n_1ljm_jn_2l'j'm_{j'}|V|n_3ljm_jn_4l'j'm_{j'}\rangle.
+h^{lj}_{n_1n_3} &= \delta_{n_3 n_1}(2n_1+l + 3/2)\hbar\omega + \sum_{p \leq \mathrm{F}}\sum_{n_2n_4}\sum_{l'j'm_{j'}}^{occ} C^{*l'j'}_{n_2 p} C^{l'j'}_{n_4 p} \langle n_1ljm_jn_2l'j'm_{j'}|V|n_3ljm_jn_4l'j'm_{j'}\rangle.
 \end{align*}
 By introducing the reduced matrix elements
 \begin{equation*}
@@ -124,7 +124,7 @@ The previous code was modified to perform Hartree-Fock calculations for $^{16}$O
   \end{tabular}
 \end{table}
 
-Proton single-particle energies are slightly higher than their neutron counterparts in the corresponding states, because of the Coulomb repulsion.
+A hint of charge symmetry breaking can be observed. Proton single-particle energies are slightly higher than their neutron counterparts in the corresponding states, because of the Coulomb repulsion.
 
 I would compare $\epsilon_{0p_{1/2}}$ for neutrons or protons with $S_n$ or $S_p$ for $^{16}$O, $\epsilon_{0d_{5/2}}$ for neutron with $S_n$ for $^{17}$O, and $\epsilon_{0d_{5/2}}$ for proton with $S_p$ for $^{17}$F.
 
@@ -140,6 +140,6 @@ I would compare $\epsilon_{0p_{1/2}}$ for neutrons or protons with $S_n$ or $S_p
   \end{tabular}
 \end{table}
 
-It seems that our naive Hartree-Fock calculations fail to reproduce the actual separation energies. It is no surprise that there is much more to the picture than meets the eye. The Hartree-Fock calculations here are on a single-particle level, in the sense that they make little reference to the whole picture, the 16-body problem. Solving for single-particle states and energies using single-particle basis is primitive and limited. Instead, we ought to consider using Slater determinants as our basis and recognizing energy as a functional of Slater determinant. 
+It seems that our naive Hartree-Fock calculations fail to reproduce the actual separation energies. It is no surprise that there is much more to the picture than meets the eye. The Hartree-Fock calculations here are on a single-particle level, in the sense that they make little reference to the whole 16-body problem. Solving for single-particle states and energies using single-particle basis is primitive and limited. Instead, we ought to consider using Slater determinants as our basis and recognizing energy as a functional of Slater determinant. 
 
 \end{document}  
