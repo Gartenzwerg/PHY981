@@ -1,0 +1,62 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{float}
+
+\title{PHY981 Project 2}
+\author{Hao Lin}
+\date{7 April, 2016}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+Note: Sections a), b) and c) are attached to the end of this report.
+
+\section{d)}
+In Section d), I wrote a piece of code to set up and diagonalize the Hamiltonian matrices corresponding to the cases in b) and c). The program was able to reproduce and verify the exact results obtained in Section b) and c). In the code, I deliberately ignored many of the theorectical considerations and let it confront the creation and annihilation operators in a rather brute-force and inefficient manner. It was made unnecessarily complicated (somewhat) on purpose. I shall also admit that the way I defined and set up the Slater determinants makes it hard to be modified to meet the need of Section e). Any attempt to change, however, is bound to be overwhelmed by my intrinsic sloth.
+
+\section{e)}
+In Section e), I stubbornly sticked to my legacy from Section d), avoiding as many changes as possible. With an aggressive use of nested "for-loops" and "if-statements", I managed to make it work in the case of two, four, six or eight particles and no more! It looks incredibly clumsy, but it serves the purpose!
+
+With the one-body Hamiltonian turned off, i.e. all states are degenerate, the ground state energy agrees with the prediction of the closed-form formula given. Let's now focus on the case with the full Hamiltonian on. For the same number of particles and available states, the ground state energy decreases as one increases $g$. This is reasonable, because the greater the $g$, the greater the binding. If we fix the value of $g$, we can find that the ground state energy goes up as we add more pairs and states into our calculation. The contribution of the increment comes from the diagonal matrix elements of the one-body Hamiltonian entirely. Note also that there exists degeneracy in the eigenenergies.
+
+Some results are displayed below.
+\begin{table}[H]
+  \centering
+\begin{tabular}{ccc}
+  \toprule
+	g & $E_0$ (N = 6, pMax = 6) & $E_0$ (N = 8, pMax = 8)\\
+  \midrule
+	-1 & 8.00657 & 14.7096 \\
+	-0.5 & 7.17836 & 13.5774 \\
+	0.5 & 3.80153 & 8.88917 \\
+	1 & -0.189159 & 2.48659 \\
+	\bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \centering
+\begin{tabular}{cccc}
+  \toprule
+	N & pMax & $E_0 (g = 0.5)$ \\
+  \midrule
+	2 & 2 & -0.618034 \\
+	4 & 4 & 0.635548 \\
+	6 & 6 & 3.80153 \\
+	8 & 8 & 8.88917 \\
+	\bottomrule
+  \end{tabular}
+\end{table}
+
+
+Other numerical results of the codes are available upon request. Readers are also encouraged to generate the results by themselves by playing with "paring.cpp" and/or "paringExt.cpp" stored in the same directory on Github.
+
+\end{document}  
